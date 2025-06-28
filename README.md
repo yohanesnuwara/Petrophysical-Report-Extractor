@@ -1,4 +1,6 @@
-# Petrophysical-Report-Extractor
+# Petrophysical Report Extractor
+
+![image](https://github.com/user-attachments/assets/21ff1b23-e5e2-4384-9991-7b1012531f94)
 
 Motivation: 
 
