@@ -165,6 +165,38 @@ def run_OCR(report_path, prompt, folder_output, model='gemini-2.5-flash', api_ke
     else:
         print(f'Model {model} currently not implemented')
 
+def run_gemini_on_image(image_path, client, prompt):
+    """
+    Run a single-shot Gemini Flash 2.0 OCR pass and write JSON (or TXT on failure).
+    """
+    # 1. Load image
+    image = Image.open(image_path)
+
+    # 2. Get full response in one go
+    full_output = get_full_response_once(
+        client=client,
+        image=image,
+        prompt=prompt,
+        max_tokens=20000
+    )
+
+    # 3. Prepare output folder & filenames
+    os.makedirs('JSON', exist_ok=True)
+    base = os.path.splitext(os.path.basename(image_path))[0]
+    json_path = os.path.join('JSON', f'{base}.json')
+    txt_path  = os.path.join('JSON', f'{base}.txt')
+
+    # 4. Try to parse JSON; if it fails, save as raw text
+    try:
+        data = json.loads(full_output)
+        with open(json_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+        print(f"[SUCCESS] JSON written to {json_path}")
+    except json.JSONDecodeError:
+        with open(txt_path, 'w', encoding='utf-8') as f:
+            f.write(full_output)
+        print(f"[FAIL] Invalid JSON, raw output saved to {txt_path}")
+
 def read_prompt(prompt_file_path):
   with open(prompt_file_path, 'r') as file:
     return file.read()
