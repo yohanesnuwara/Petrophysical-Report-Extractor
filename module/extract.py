@@ -15,10 +15,6 @@ import copy
 from google.genai.errors import ServerError
 import time
 
-
-# Define experiment types
-VALID_EXPERIMENT_TYPES = {"CCE", "CVD", "MSS", "DLE", "VISCO"}
-
 def get_full_response_once(client, image, prompt, max_tokens=50000):
     """
     Single-shot call to Gemini Flash 2.0, requesting up to max_tokens.
@@ -157,7 +153,7 @@ def run_OCR(report_path, prompt, folder_output, model='gemini-2.5-flash', api_ke
     pages_count = len(images)
 
     # Check which OCR model is used
-    if model in ('gemini-2.0-flash', 'gemini-2.5-flash')
+    if model in ('gemini-2.0-flash', 'gemini-2.5-flash'):
         client = genai.Client(api_key=api_key)
 
         # Loop OCR for every page
